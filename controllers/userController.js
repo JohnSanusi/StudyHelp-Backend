@@ -8,16 +8,21 @@ const JWT_SECRET = config.JWT_SECRET;
 // Create a new user (Register)
 export const createUser = async (req, res) => {
     try {
-        const { email, password, name, role } = req.body;
+        const { email, password, name, role, whatsappNumber, school } = req.body;
 
         // Validate input
-        if (!email || !password || !role) {
-            return res.status(400).json({ error: 'Email, password, and role are required' });
+        if (!email || !password || !role || !whatsappNumber) {
+            return res.status(400).json({ error: 'Email, password, role, and whatsapp number are required' });
         }
 
         // Validate role
         if (!['student', 'teacher'].includes(role)) {
             return res.status(400).json({ error: 'Invalid role. Must be either student or teacher' });
+        }
+
+        // Validate school for students
+        if (role === 'student' && !school) {
+            return res.status(400).json({ error: 'School is required for students' });
         }
 
         // Check if user already exists
@@ -30,13 +35,22 @@ export const createUser = async (req, res) => {
         // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create user
-        const user = await User.create({
+        // Create user data
+        const userData = {
             email,
             password: hashedPassword,
             name,
-            role
-        });
+            role,
+            whatsappNumber
+        };
+
+        // Add school only for students
+        if (role === 'student') {
+            userData.school = school;
+        }
+
+        // Create user
+        const user = await User.create(userData);
 
         // Generate JWT token
         const token = jwt.sign({ userId: user._id, email: user.email }, JWT_SECRET, {
@@ -49,6 +63,8 @@ export const createUser = async (req, res) => {
             email: user.email,
             name: user.name,
             role: user.role,
+            whatsappNumber: user.whatsappNumber,
+            school: user.school,
             createdAt: user.createdAt,
             updatedAt: user.updatedAt
         };
@@ -95,6 +111,8 @@ export const loginUser = async (req, res) => {
             email: user.email,
             name: user.name,
             role: user.role,
+            whatsappNumber: user.whatsappNumber,
+            school: user.school,
             createdAt: user.createdAt,
             updatedAt: user.updatedAt
         };

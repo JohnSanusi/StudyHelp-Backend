@@ -21,6 +21,25 @@ const userSchema = new mongoose.Schema({
         enum: ['student', 'teacher'],
         required: true,
         default: 'student'
+    },
+    whatsappNumber: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    school: {
+        type: String,
+        trim: true,
+        // Only required for students
+        required: function () {
+            return this.role === 'student';
+        }
+    },
+    resetPasswordToken: {
+        type: String
+    },
+    resetPasswordExpires: {
+        type: Date
     }
 }, {
     timestamps: true // Automatically adds createdAt and updatedAt
