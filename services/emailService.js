@@ -2,7 +2,9 @@ import nodemailer from 'nodemailer';
 import { config } from '../config/env.js';
 
 // Create reusable transporter
-const transporter = nodemailer.createTransporter({
+// Handle both ES module and CommonJS compatibility
+const createTransporter = nodemailer.createTransport || nodemailer.default?.createTransport;
+const transporter = createTransporter({
     service: 'gmail',
     auth: {
         user: config.EMAIL_USER,
