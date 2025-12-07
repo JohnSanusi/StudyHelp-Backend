@@ -1,5 +1,5 @@
 import fs from 'fs';
-import pdf from 'pdf-parse';
+import pdfParse from 'pdf-parse/lib/pdf-parse.js';
 import mammoth from 'mammoth';
 
 export const extractTextFromFile = async (file) => {
@@ -11,7 +11,7 @@ export const extractTextFromFile = async (file) => {
 
         if (fileType === 'application/pdf') {
             const dataBuffer = fs.readFileSync(filePath);
-            const data = await pdf(dataBuffer);
+            const data = await pdfParse(dataBuffer);
             text = data.text;
         } else if (fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
             const result = await mammoth.extractRawText({ path: filePath });
