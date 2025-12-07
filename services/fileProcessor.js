@@ -1,6 +1,9 @@
 import fs from 'fs';
-import pdfParse from 'pdf-parse/lib/pdf-parse.js';
 import mammoth from 'mammoth';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+const pdfParse = require('pdf-parse');
 
 export const extractTextFromFile = async (file) => {
     const filePath = file.path;
