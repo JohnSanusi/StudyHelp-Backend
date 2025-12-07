@@ -3,7 +3,8 @@ import {
     uploadLesson,
     getLessons,
     getLesson,
-    deleteLesson
+    deleteLesson,
+    getDashboardStats
 } from '../controllers/lessonController.js';
 import { authenticateToken } from '../middleware/authMiddleware.js';
 import { isTeacher } from '../middleware/roleMiddleware.js';
@@ -15,6 +16,7 @@ const router = express.Router();
 router.use(authenticateToken);
 
 // Teacher only routes
+router.get('/stats', isTeacher, getDashboardStats); // Dashboard stats
 router.post('/upload', isTeacher, upload.single('file'), uploadLesson);
 router.get('/', isTeacher, getLessons);
 router.get('/:id', isTeacher, getLesson);

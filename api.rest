@@ -177,6 +177,7 @@ Authorization: Bearer {{token}}
 
 ### 12. Delete Lesson
 # Replace LESSON_ID with actual lesson ID
-DELETE {{baseUrl}}/lessons/LESSON_ID
+### 13. Get Dashboard Stats (Teacher)
+GET {{baseUrl}}/lessons/stats
 Authorization: Bearer {{token}}
 

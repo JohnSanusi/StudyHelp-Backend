@@ -121,3 +121,51 @@ export const deleteLesson = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
+
+// Get dashboard stats
+export const getDashboardStats = async (req, res) => {
+    try {
+        const userId = req.user.userId;
+
+        // Get all lessons for the teacher
+        const lessons = await Lesson.find({ teacherId: userId }).sort({ createdAt: -1 });
+
+        // Calculate stats
+        const totalLessons = lessons.length;
+
+        // Calculate total questions generated
+        const totalQuestions = lessons.reduce((sum, lesson) => {
+            return sum + (lesson.questions ? lesson.questions.length : 0);
+        }, 0);
+
+        // Get recent uploads (last 5)
+        const recentUploads = lessons.slice(0, 5).map(lesson => ({
+            id: lesson._id,
+            title: lesson.title,
+            createdAt: lesson.createdAt,
+            topicsCount: lesson.topics ? lesson.topics.length : 0,
+            questionsCount: lesson.questions ? lesson.questions.length : 0
+        }));
+
+        // Mock data for student participation (since we don't have student interaction yet)
+        const studentParticipation = {
+            activeStudents: 0,
+            completedTests: 0,
+            averageScore: 0
+        };
+
+        res.status(200).json({
+            stats: {
+                totalLessons,
+                totalQuestions,
+                testsCreated: totalLessons, // Assuming 1 test per lesson for now
+                studentParticipation,
+                recentUploads,
+                upcomingEvents: [] // Placeholder for future feature
+            }
+        });
+    } catch (error) {
+        console.error('Error fetching dashboard stats:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
