@@ -135,3 +135,48 @@ Content-Type: application/json
   "name": "No WhatsApp",
   "role": "teacher"
 }
+
+###
+
+### ----------------------------------------
+### LESSON UPLOAD SYSTEM (Teacher Only)
+### ----------------------------------------
+
+### 9. Upload Lesson (Teacher)
+# Requires a file named 'lesson.txt' or 'lesson.pdf' in the same directory or adjust path
+# Use the teacher token from login
+POST {{baseUrl}}/lessons/upload
+Authorization: Bearer {{token}}
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="title"
+
+Introduction to Biology
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="file"; filename="lesson.txt"
+Content-Type: text/plain
+
+Biology is the scientific study of life. It is a natural science with a broad scope but has several unifying themes that tie it together as a single, coherent field. For instance, all organisms are made up of cells that process hereditary information encoded in genes, which can be transmitted to future generations. Another major theme is evolution, which explains the unity and diversity of life. Energy processing is also important to life as it allows organisms to move, grow, and reproduce. Finally, all organisms are able to regulate their own internal environments.
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
+
+###
+
+### 10. Get All Lessons (Teacher)
+GET {{baseUrl}}/lessons
+Authorization: Bearer {{token}}
+
+###
+
+### 11. Get Single Lesson
+# Replace LESSON_ID with actual lesson ID
+GET {{baseUrl}}/lessons/LESSON_ID
+Authorization: Bearer {{token}}
+
+###
+
+### 12. Delete Lesson
+# Replace LESSON_ID with actual lesson ID
+DELETE {{baseUrl}}/lessons/LESSON_ID
+Authorization: Bearer {{token}}
+

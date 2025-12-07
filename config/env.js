@@ -7,5 +7,6 @@ export const config = {
     NODE_ENV: process.env.NODE_ENV || 'development',
     EMAIL_USER: process.env.EMAIL_USER,
     EMAIL_PASS: process.env.EMAIL_PASS,
-    FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:3000'
+    FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:3000',
+    GEMINI_API_KEY: process.env.GEMINI_API_KEY
 };
