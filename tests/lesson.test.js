@@ -25,7 +25,7 @@ jest.unstable_mockModule('../services/geminiService.js', () => ({
 }));
 
 // Import app after mocking
-const { default: appImport } = await import('../app.js');
+const { default: appImport } = await import('../server.js');
 const appToUse = appImport;
 
 describe('Lesson Routes', () => {
