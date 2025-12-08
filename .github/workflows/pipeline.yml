@@ -8,6 +8,12 @@ jobs:
   build: 
     runs-on: ubuntu-latest
 
+    services:
+      mongodb:
+        image: mongo:5.0
+        ports:
+          - 27017:27017
+
     steps: 
       - name: Checkout code
         uses: actions/checkout@v4
@@ -21,4 +27,8 @@ jobs:
         run: npm install 
 
       - name: Run tests
+        env:
+          MONGODB_URI: mongodb://localhost:27017/test_db
+          JWT_SECRET: test_secret
+          NODE_ENV: test
         run: npm test
