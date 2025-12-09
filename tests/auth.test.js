@@ -28,7 +28,8 @@ describe('Auth Routes', () => {
                     password: 'password123',
                     role: 'student',
                     whatsappNumber: '1234567890',
-                    school: 'Test School'
+                    school: 'Test School',
+                    authProvider: 'local'
                 });
 
             expect(res.statusCode).toEqual(201);
@@ -47,7 +48,8 @@ describe('Auth Routes', () => {
                     password: 'password123',
                     role: 'student',
                     whatsappNumber: '0987654321',
-                    school: 'Test School'
+                    school: 'Test School',
+                    authProvider: 'local'
                 });
 
             const res = await request(app)

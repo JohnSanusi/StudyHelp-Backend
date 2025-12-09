@@ -8,11 +8,17 @@ const JWT_SECRET = config.JWT_SECRET;
 // Create a new user (Register)
 export const createUser = async (req, res) => {
     try {
-        const { email, password, name, role, whatsappNumber, school } = req.body;
+        const { email, password, name, role, whatsappNumber, school, authProvider } = req.body;
 
         // Validate input
-        if (!email || !password || !role || !whatsappNumber) {
-            return res.status(400).json({ error: 'Email, password, role, and whatsapp number are required' });
+        if (!email || !role) {
+            return res.status(400).json({ error: 'Email and role are required' });
+        }
+
+        // Validate password for local auth
+        const provider = authProvider || 'local';
+        if (provider === 'local' && !password) {
+            return res.status(400).json({ error: 'Password is required for local registration' });
         }
 
         // Validate role
@@ -20,10 +26,8 @@ export const createUser = async (req, res) => {
             return res.status(400).json({ error: 'Invalid role. Must be either student or teacher' });
         }
 
-        // Validate school for students
-        if (role === 'student' && !school) {
-            return res.status(400).json({ error: 'School is required for students' });
-        }
+        // Note: whatsappNumber and school are now optional for OAuth users
+        // They can be added later via profile update
 
         // Check if user already exists
         const existingUser = await User.findOne({ email });
@@ -32,20 +36,24 @@ export const createUser = async (req, res) => {
             return res.status(400).json({ error: 'User already exists' });
         }
 
-        // Hash password
-        const hashedPassword = await bcrypt.hash(password, 10);
-
         // Create user data
         const userData = {
             email,
-            password: hashedPassword,
             name,
             role,
-            whatsappNumber
+            authProvider: provider
         };
 
-        // Add school only for students
-        if (role === 'student') {
+        // Hash password only for local auth
+        if (provider === 'local' && password) {
+            userData.password = await bcrypt.hash(password, 10);
+        }
+
+        // Add optional fields if provided
+        if (whatsappNumber) {
+            userData.whatsappNumber = whatsappNumber;
+        }
+        if (school) {
             userData.school = school;
         }
 
