@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import session from 'express-session';
+import MongoStore from 'connect-mongo';
 import connectDB from './config/db.js';
 import passport from './config/passport.js';
 import userRoutes from './routes/userRoutes.js';
@@ -9,7 +10,7 @@ import authRoutes from './routes/authRoutes.js';
 import { config } from './config/env.js';
 
 const app = express();
-const PORT = config.PORT;
+const PORT = config.PORT || 5000;
 
 // Connect to MongoDB
 connectDB();
@@ -24,6 +25,10 @@ app.use(
         secret: config.SESSION_SECRET,
         resave: false,
         saveUninitialized: false,
+        store: MongoStore.create({
+            mongoUrl: config.MONGODB_URI,
+            ttl: 24 * 60 * 60 // 1 day
+        }),
         cookie: {
             secure: config.NODE_ENV === 'production', // Use secure cookies in production
             maxAge: 24 * 60 * 60 * 1000 // 24 hours
