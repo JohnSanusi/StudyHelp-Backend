@@ -38,9 +38,9 @@ export const handleOAuthSuccess = (req, res) => {
             updatedAt: user.updatedAt
         };
 
-        // Redirect to frontend with token and user data
-        // In production, you might want to use a more secure method
-        const redirectUrl = `${config.FRONTEND_URL}/auth/callback?token=${token}&user=${encodeURIComponent(JSON.stringify(userResponse))}`;
+        // Redirect back to login page with token and user data
+        // Frontend can show success alert and then redirect to dashboard
+        const redirectUrl = `${config.FRONTEND_URL}/login?success=true&token=${token}&user=${encodeURIComponent(JSON.stringify(userResponse))}`;
         
         res.redirect(redirectUrl);
     } catch (error) {
