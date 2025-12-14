@@ -7,6 +7,7 @@ import passport from './config/passport.js';
 import userRoutes from './routes/userRoutes.js';
 import lessonRoutes from './routes/lessonRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import studyRoutes from './routes/studyRoutes.js';
 import { config } from './config/env.js';
 
 const app = express();
@@ -44,6 +45,7 @@ app.use(passport.session());
 app.use('/api/users', userRoutes);
 app.use('/api/lessons', lessonRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/study', studyRoutes);
 
 // Health check route
 app.get('/', (req, res) => {
@@ -57,4 +59,5 @@ if (process.env.NODE_ENV !== 'test') {
     });
 }
 
+export { app };
 export default app;
